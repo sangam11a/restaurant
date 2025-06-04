@@ -35,6 +35,18 @@ namespace Stock.Data
                 .HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId);
+            modelBuilder.Entity<Bill>()
+             .HasOne(b => b.Customer)
+             .WithMany(c => c.Bills)
+             .HasForeignKey(b => b.CustomerId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            // Employee 1 ⇢ * Bills
+            modelBuilder.Entity<Bill>()
+                .HasOne(b => b.Employee)
+                .WithMany(e => e.Bills)
+                .HasForeignKey(b => b.EmpId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

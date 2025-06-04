@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Stock.Migrations
 {
     /// <inheritdoc />
-    public partial class second : Migration
+    public partial class third : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,8 @@ namespace Stock.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     TableNumber = table.Column<int>(type: "int", nullable: false),
                     TimeIn = table.Column<TimeOnly>(type: "time", nullable: false),
-                    TimeOut = table.Column<TimeOnly>(type: "time", nullable: false)
+                    TimeOut = table.Column<TimeOnly>(type: "time", nullable: false),
+                    BillId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,6 +52,19 @@ namespace Stock.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FoodCategories",
+                columns: table => new
+                {
+                    FoodCategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodCategories", x => x.FoodCategoryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
                 {
@@ -71,8 +85,6 @@ namespace Stock.Migrations
                 {
                     OrdId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DishId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -96,8 +108,7 @@ namespace Stock.Migrations
                     Amount = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     PaymentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmpId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeEmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -110,29 +121,92 @@ namespace Stock.Migrations
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Bills_Employees_EmployeeEmpId",
-                        column: x => x.EmployeeEmpId,
+                        name: "FK_Bills_Employees_EmpId",
+                        column: x => x.EmpId,
                         principalTable: "Employees",
                         principalColumn: "EmpId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    MenuId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FoodName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    FoodCategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.MenuId);
+                    table.ForeignKey(
+                        name: "FK_Menus_FoodCategories_FoodCategoryId",
+                        column: x => x.FoodCategoryId,
+                        principalTable: "FoodCategories",
+                        principalColumn: "FoodCategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "MenuId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrdId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_CustomerId",
                 table: "Bills",
-                column: "CustomerId",
-                unique: true);
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bills_EmployeeEmpId",
+                name: "IX_Bills_EmpId",
                 table: "Bills",
-                column: "EmployeeEmpId");
+                column: "EmpId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_Phone",
                 table: "Employees",
                 column: "Phone",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Menus_FoodCategoryId",
+                table: "Menus",
+                column: "FoodCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_MenuId",
+                table: "OrderItems",
+                column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
@@ -147,13 +221,22 @@ namespace Stock.Migrations
                 name: "Bills");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "Stores");
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Menus");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "FoodCategories");
 
             migrationBuilder.DropTable(
                 name: "Customers");

@@ -12,8 +12,8 @@ using Stock.Data;
 namespace Stock.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250531115146_second")]
-    partial class second
+    [Migration("20250603120143_third")]
+    partial class third
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,12 +80,6 @@ namespace Stock.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DishId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
-
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -110,10 +104,7 @@ namespace Stock.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("EmployeeEmpId")
+                    b.Property<Guid>("EmpId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PaymentTime")
@@ -124,10 +115,9 @@ namespace Stock.Migrations
 
                     b.HasKey("BillId");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("EmployeeEmpId");
+                    b.HasIndex("EmpId");
 
                     b.ToTable("Bills");
                 });
@@ -141,6 +131,9 @@ namespace Stock.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BillId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -172,6 +165,77 @@ namespace Stock.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Stock.Models.FoodCategory", b =>
+                {
+                    b.Property<int>("FoodCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodCategoryId"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FoodCategoryId");
+
+                    b.ToTable("FoodCategories");
+                });
+
+            modelBuilder.Entity("Stock.Models.Menu", b =>
+                {
+                    b.Property<int>("MenuId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuId"));
+
+                    b.Property<int>("FoodCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FoodName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.HasKey("MenuId");
+
+                    b.HasIndex("FoodCategoryId");
+
+                    b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("Stock.Models.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Stock.Models.Store", b =>
@@ -211,15 +275,15 @@ namespace Stock.Migrations
             modelBuilder.Entity("Stock.Models.Bill", b =>
                 {
                     b.HasOne("Stock.Models.Customer", "Customer")
-                        .WithOne("Bill")
-                        .HasForeignKey("Stock.Models.Bill", "CustomerId")
+                        .WithMany("Bills")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Employee", "Employee")
                         .WithMany("Bills")
-                        .HasForeignKey("EmployeeEmpId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EmpId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -227,15 +291,49 @@ namespace Stock.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("Stock.Models.Menu", b =>
+                {
+                    b.HasOne("Stock.Models.FoodCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("FoodCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Stock.Models.OrderItem", b =>
+                {
+                    b.HasOne("Stock.Models.Menu", "Menu")
+                        .WithMany()
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Employee", b =>
                 {
                     b.Navigation("Bills");
                 });
 
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("Stock.Models.Customer", b =>
                 {
-                    b.Navigation("Bill")
-                        .IsRequired();
+                    b.Navigation("Bills");
 
                     b.Navigation("Orders");
                 });

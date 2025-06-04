@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stock.Data;
 using Stock.Models;
 using Stock.Models.ModelDTO;
@@ -15,14 +16,13 @@ namespace Stock.Controllers
             this.dbContext = dbContext;
         }
         [HttpGet]
-        public IActionResult GetAllMenu()
+        public IActionResult GetAllMenus()
         {
-            var data = dbContext.Menus.ToList();    
-            if(data is null)
-            {
-                return NotFound();
-            }
-            return Ok(data);
+            var menus = dbContext.Menus
+                .Include(m => m.Category)
+                .ToList();
+
+            return Ok(menus);
         }
 
         [HttpPost]

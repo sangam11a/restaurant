@@ -17,7 +17,7 @@ namespace Stock.Models
         public DateTime PaymentTime { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Please enter employee id")]
-        public int EmpId { get; set; }  // FK to Employee
+        public Guid EmpId { get; set; }  // FK to Employee
 
         [ValidateNever]
         public Employee Employee { get; set; }  // Navigation to Employee

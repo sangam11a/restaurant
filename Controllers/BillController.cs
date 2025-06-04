@@ -71,6 +71,17 @@ namespace Stock.Controllers
         //        return Ok(readData);
         //    }
         //}
+        [HttpGet]
+        public IActionResult GetAllBills()
+        {
+            var newData = dbContext.Bills.Include(b=>b.EmpId).Include(c=>c.CustomerId).ToList();
+            if(newData is null)
+            {
+                return NotFound(new { message = "Data not found" });
+            }
+            return Ok(newData);
+        }
+
         [HttpPost("pay")]
         public IActionResult GenerateBill([FromBody] BillDTO billDto)
         {
@@ -154,6 +165,22 @@ namespace Stock.Controllers
                 return StatusCode(500, "Payment failed. " + ex.Message);
             }
         }
+        [HttpGet("id")]
+        public IActionResult GetBillFromId(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var data = dbContext.Bills.FirstOrDefault(o => o.BillId == id);
+            if (data is null)
+            {
+                return NotFound(new { message = $"Bill with id {id} not found" });
+            }
+            return Ok(data);
+        }
 
     }
+   
+    
 }

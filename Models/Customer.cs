@@ -29,9 +29,10 @@ namespace Stock.Models
 
         public TimeOnly TimeOut { get; set; }
 
+        public int BillId { get; set; }
         // Navigation
         [ValidateNever]
-        public Bill Bill { get; set; }
+        public ICollection<Bill> Bills{ get; set; } = new List<Bill>();
 
         [ValidateNever]
         public ICollection<Order> Orders { get; set; } = new List<Order>();
