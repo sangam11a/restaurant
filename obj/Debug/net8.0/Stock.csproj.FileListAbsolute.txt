@@ -141,3 +141,4 @@ C:\Users\Dell\source\repos\Stock\Stock\obj\Debug\net8.0\Stock.pdb
 C:\Users\Dell\source\repos\Stock\Stock\obj\Debug\net8.0\Stock.genruntimeconfig.cache
 C:\Users\Dell\source\repos\Stock\Stock\obj\Debug\net8.0\ref\Stock.dll
 C:\Users\Dell\source\repos\Stock\Stock\obj\Debug\net8.0\Stock.sourcelink.json
+C:\Users\Dell\source\repos\Stock\Stock\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -4,7 +4,7 @@ namespace Stock.Models.ModelDTO
 {
     public class OrderDTO
     {
-        public int? OrdId { get; set; } // Nullable for POST, required for PUT
+        //public int? OrdId { get; set; } // Nullable for POST, required for PUT
         public Guid CustomerId { get; set; }
 
         public bool Status { get; set; } = false;

@@ -26,8 +26,6 @@ public class OrderController : ControllerBase
     {
         var newOrder = new Order
         {
-            OrdId = dto.OrdId ?? 0,
-            
             CustomerId = dto.CustomerId,
             Status = dto.Status
         };

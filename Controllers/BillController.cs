@@ -74,7 +74,7 @@ namespace Stock.Controllers
         [HttpGet]
         public IActionResult GetAllBills()
         {
-            var newData = dbContext.Bills.Include(b=>b.EmpId).Include(c=>c.CustomerId).ToList();
+            var newData = dbContext.Bills.ToList();
             if(newData is null)
             {
                 return NotFound(new { message = "Data not found" });

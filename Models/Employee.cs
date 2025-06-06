@@ -1,4 +1,5 @@
 ﻿using Stock.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,6 +23,7 @@ public class Employee
 
     public string Designation { get; set; } = string.Empty;
 
+    
     [Required]
     [Phone]
     public string Phone { get; set; } = string.Empty;

@@ -870,11 +870,6 @@
       "OrderDTO": {
         "type": "object",
         "properties": {
-          "ordId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "customerId": {
             "type": "string",
             "format": "uuid"

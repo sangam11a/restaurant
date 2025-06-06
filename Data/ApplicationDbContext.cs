@@ -19,6 +19,7 @@ namespace Stock.Data
         public DbSet<FoodCategory> FoodCategories { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Login> Logins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
