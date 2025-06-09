@@ -152,6 +152,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Stock.Controllers.LoginController",
+    "Method": "Login",
+    "RelativePath": "api/Login/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Stock.Models.ModelDTO.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Stock.Controllers.LoginController",
+    "Method": "Refresh",
+    "RelativePath": "api/Login/refresh",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tokenDto",
+        "Type": "Stock.Models.ModelDTO.TokenDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Stock.Controllers.LoginController",
+    "Method": "Register",
+    "RelativePath": "api/Login/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Stock.Models.ModelDTO.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Stock.Controllers.LoginController",
+    "Method": "SecureEndpoint",
+    "RelativePath": "api/Login/secure",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Stock.Controllers.MenuController",
     "Method": "GetAllMenus",
     "RelativePath": "api/Menu",

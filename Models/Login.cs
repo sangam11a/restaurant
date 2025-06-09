@@ -16,11 +16,15 @@ namespace Stock.Models
         ErrorMessage = "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.")]
         public string Password { get; set; }
         public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+
+        public DateTime RefreshTokenExpiryTime { get; set; }
+
         public bool Verified { get; set; } = false;
         public string VerificationCode { get; set; }= String.Empty;
-        [ForeignKey("Employee")]
-        public Guid EmpId { get; set; }
+        //[ForeignKey("EmpId")]
+        //public Guid EmpId { get; set; }
 
-        public Employee Employee { get; set; }
+        //public Employee Employee { get; set; }
     }
 }

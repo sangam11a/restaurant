@@ -1,8 +1,9 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
-    "title": "Stock",
-    "version": "1.0"
+    "title": "Stock API",
+    "description": "API for Stock management with JWT authentication",
+    "version": "v2"
   },
   "paths": {
     "/api/Bill": {
@@ -289,37 +290,6 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/LoginDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Login/refresh": {
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenDTO"
               }
             }
           }
@@ -1098,20 +1068,6 @@
         "type": "integer",
         "format": "int32"
       },
-      "TokenDTO": {
-        "type": "object",
-        "properties": {
-          "accessToken": {
-            "type": "string",
-            "nullable": true
-          },
-          "refreshToken": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "WeatherForecast": {
         "type": "object",
         "properties": {
@@ -1135,6 +1091,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' [space] and then your valid JWT token in the text input below.\n\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }
